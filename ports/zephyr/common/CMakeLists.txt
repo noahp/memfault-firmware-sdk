@@ -48,7 +48,7 @@ zephyr_library_sources_ifdef(CONFIG_MEMFAULT_HTTP_PERIODIC_UPLOAD memfault_http_
 
 # Make sure RAM based storage regions are not initialized on boot
 # by placing them in special linker sections
-zephyr_linker_sources(NOINIT memfault-no-init.ld)
+zephyr_linker_sources_ifdef(CONFIG_MEMFAULT_DEFAULT_NOINIT_SECTION NOINIT memfault-no-init.ld)
 
 if (CONFIG_MEMFAULT_GNU_BUILD_ID_SOURCE_BUILTIN)
   zephyr_linker_sources(SECTIONS memfault-build-id.ld)

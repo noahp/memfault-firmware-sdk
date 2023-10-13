@@ -12,6 +12,9 @@ target_sources(app PRIVATE src/main.c)
 zephyr_include_directories(config)
 project(qemu-app LANGUAGES C VERSION 1.0.0)
 
+zephyr_linker_sources_ifndef(CONFIG_MEMFAULT_DEFAULT_NOINIT_SECTION NOINIT custom-noinit-coredump.ld)
+zephyr_linker_sources_ifndef(CONFIG_MEMFAULT_DEFAULT_NOINIT_SECTION RAM_SECTIONS custom-noinit-reboot.ld)
+
 # Generate a git hash that's used as part of the software_version, eg
 # 1.0.0+12345678. Permit overriding at command line for CI builds.
 if (NOT DEFINED ZEPHYR_MEMFAULT_EXAMPLE_GIT_SHA1)

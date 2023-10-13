@@ -399,6 +399,15 @@ config MEMFAULT_FAULT_HANDLER_RETURN
         instead of rebooting the system. Useful if the system needs to hook into
         `k_sys_fatal_error_handler` at the end of system fault handling.
 
+config MEMFAULT_DEFAULT_NOINIT_SECTION
+        bool "Use a default noinit section for Memfault"
+        default y
+        help
+         When enabled, Memfault will use a default noinit section for its
+         internal data. Zephyr will often place the noinit section at the end
+         of data + bss, which can result in the Memfault noinint data moving
+         absolute offset between different builds.
+
 menuconfig MEMFAULT_USE_GNU_BUILD_ID
         default y
         bool "Use a GNU build ID in an image"
