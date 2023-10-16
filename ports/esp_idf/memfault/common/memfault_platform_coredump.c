@@ -302,8 +302,23 @@ void memfault_platform_coredump_storage_get_info(sMfltCoredumpStorageInfo *info)
     return;
   }
 
+#if defined(CONFIG_MEMFAULT_COREDUMP_STORAGE_LIMIT_SIZE)
+  // confirm MAX_SIZE is greater than 0 and aligned to SPI_FLASH_SEC_SIZE
+  MEMFAULT_STATIC_ASSERT(
+    (CONFIG_MEMFAULT_COREDUMP_STORAGE_MAX_SIZE > 0) &&
+      (CONFIG_MEMFAULT_COREDUMP_STORAGE_MAX_SIZE % SPI_FLASH_SEC_SIZE == 0),
+    "Error, check CONFIG_MEMFAULT_COREDUMP_STORAGE_MAX_SIZE value: " MEMFAULT_EXPAND_AND_QUOTE(
+      CONFIG_MEMFAULT_COREDUMP_STORAGE_MAX_SIZE));
+#endif
+
   *info  = (sMfltCoredumpStorageInfo) {
-    .size = core_part->size,
+    .size =
+#if defined(CONFIG_MEMFAULT_COREDUMP_STORAGE_LIMIT_SIZE)
+      MEMFAULT_MIN(core_part->size, CONFIG_MEMFAULT_COREDUMP_STORAGE_MAX_SIZE)
+#else
+      core_part->size
+#endif
+      ,
     .sector_size = SPI_FLASH_SEC_SIZE,
   };
 }

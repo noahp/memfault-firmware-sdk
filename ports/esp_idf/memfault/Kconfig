@@ -32,6 +32,29 @@ menu "Memfault"
             been shipped and the partition table cannot be modified, an
             OTA slot can be used instead.
 
+    menuconfig MEMFAULT_COREDUMP_STORAGE_LIMIT_SIZE
+        bool "Limit the size of a coredump"
+        default n
+        help
+            By default, Memfault will attempt to capture the entire RAM
+            region of the device, up to the maximum size of the `coredump`
+            region. If it's desirable to artificially reduce the utilized space
+            in the `coredump` partition, enabling this option will limit
+            the size of the coredump to the value specified in
+            MEMFAULT_COREDUMP_STORAGE_MAX_SIZE.
+
+    if MEMFAULT_COREDUMP_STORAGE_LIMIT_SIZE
+
+    config MEMFAULT_COREDUMP_STORAGE_MAX_SIZE
+        int "The maximum size of a coredump"
+        default 524288  # 128*4096
+        help
+            The maximum size of a coredump. If a coredump is larger than this
+            size, it will be truncated to this size. Must be aligned to
+            SPI_FLASH_SEC_SIZE.
+
+    endif # MEMFAULT_COREDUMP_STORAGE_LIMIT_SIZE
+
     config MEMFAULT_AUTOMATIC_INIT
         bool "[DEPRECATED] Automatically initialize the SDK when the system is booted"
         default n
@@ -63,6 +86,24 @@ menu "Memfault"
         default "esp32-main"
 
     endif # MEMFAULT_DEFAULT_GET_DEVICE_INFO
+
+    config MEMFAULT_PLATFORM_CONFIG_FILE
+        string "Name of the Memfault platform config file"
+        default "memfault_platform_config.h"
+        help
+            The name of the file which contains the Memfault platform config
+            options. This file must be included in the project's include path.
+
+    config MEMFAULT_USER_CONFIG_SILENT_FAIL
+        bool "Continue with build even if user configuration of Memfault SDK is missing"
+        default y
+        help
+          When enabled, __has_include is used to conditionally include the three Memfault
+          configuration files to a port if they exist instead of failing to compile if
+          they do not:
+          memfault_platform_config.h
+          memfault_metrics_heartbeat_config.def
+          memfault_trace_reason_user_config.def
 
     config MEMFAULT_HTTP_CLIENT_TIMEOUT_MS
         int "The HTTP client timeout in milliseconds"
