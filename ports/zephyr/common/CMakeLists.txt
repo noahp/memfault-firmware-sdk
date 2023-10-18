@@ -57,6 +57,13 @@ if (CONFIG_MEMFAULT_GNU_BUILD_ID_SOURCE_BUILTIN)
   zephyr_ld_options("-Wl,--build-id")
 endif()
 
+# Unconditionally support compact logs by adding the linker section. Users will
+# still need to enable it via the MEMFAULT_COMPACT_LOG_ENABLE
+# TODO make this conditional, so users can avoid overriding the C std if it
+# conflicts with their setup.
+zephyr_linker_sources(SECTIONS memfault-compact-log.ld)
+set_property(GLOBAL PROPERTY CSTD gnu11)
+
 if(CONFIG_MEMFAULT_HEAP_STATS AND CONFIG_HEAP_MEM_POOL_SIZE GREATER 0)
   zephyr_ld_options(-Wl,--wrap=k_malloc)
   zephyr_ld_options(-Wl,--wrap=k_free)
