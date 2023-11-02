@@ -159,7 +159,16 @@ if(CONFIG_MEMFAULT_MBEDTLS_METRICS)
   list(APPEND COMPONENT_REQUIRES mbedtls)
 endif()
 
-if($ENV{MEMFAULT_ESP_HTTP_CLIENT_ENABLE})
+set(http_client_enabled 0)
+if (DEFINED $ENV{MEMFAULT_ESP_HTTP_CLIENT_ENABLE})
+if ($ENV{MEMFAULT_ESP_HTTP_CLIENT_ENABLE})
+set(http_client_enabled 1)
+endif()
+endif()
+if (CONFIG_MEMFAULT_HTTP_CLIENT_ENABLE)
+set(http_client_enabled 1)
+endif()
+if(${http_client_enabled})
   list(APPEND COMPONENT_REQUIRES esp_http_client esp_https_ota)
 endif()
 register_component()
@@ -187,7 +196,7 @@ if (CONFIG_MEMFAULT_FREERTOS_TASK_RUNTIME_STATS)
   component_compile_options(-DMEMFAULT_USE_NEW_FREERTOS_IDLETASK_RUNTIME_API=1)
 endif()
 
-component_compile_options(-DMEMFAULT_ESP_HTTP_CLIENT_ENABLE=$ENV{MEMFAULT_ESP_HTTP_CLIENT_ENABLE})
+component_compile_options(-DMEMFAULT_ESP_HTTP_CLIENT_ENABLE=${http_client_enabled})
 
 # FreeRTOS error logging redirect for ESP-IDF compatibility.
 component_compile_options(

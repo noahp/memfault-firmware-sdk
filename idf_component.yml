@@ -1,0 +1,10 @@
+description: Memfault Firmware SDK
+documentation: https://docs.memfault.com/
+issues: https://github.com/memfault/memfault-firmware-sdk/issues
+repository: https://github.com/memfault/memfault-firmware-sdk.git
+url: https://app.memfault.com
+version: 1.4.1-rc1
+
+dependencies:
+  memfault:
+    path: ports/esp_idf/memfault

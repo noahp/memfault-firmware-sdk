@@ -96,6 +96,13 @@ menu "Memfault"
           memfault_metrics_heartbeat_config.def
           memfault_trace_reason_user_config.def
 
+    config MEMFAULT_HTTP_CLIENT_ENABLE
+        bool "Enables the Memfault HTTP client"
+        default y
+        help
+            Enable the Memfault HTTP client. Disable this config to implement a
+            custom version of the function.
+
     config MEMFAULT_HTTP_CLIENT_TIMEOUT_MS
         int "The HTTP client timeout in milliseconds"
         default 5000
