@@ -35,6 +35,7 @@ MEMFAULT_DISABLE_WARNING("-Wunused-macros")
 #undef MEMFAULT_METRICS_KEY_DEFINE
 #undef MEMFAULT_METRICS_KEY_DEFINE_WITH_RANGE
 #undef MEMFAULT_METRICS_STRING_KEY_DEFINE
+#undef MEMFAULT_METRICS_STRING_KEY_DEFINE_WITH_SESSION
 #undef MEMFAULT_METRICS_SESSION_KEY_DEFINE
 #undef MEMFAULT_METRICS_KEY_DEFINE_WITH_SESSION
 #undef MEMFAULT_METRICS_KEY_DEFINE_WITH_RANGE_AND_SESSION
@@ -49,6 +50,7 @@ MEMFAULT_DISABLE_WARNING("-Wunused-macros")
 
 #define MEMFAULT_METRICS_KEY_DEFINE(key_name, value_type)
 #define MEMFAULT_METRICS_STRING_KEY_DEFINE(key_name, max_length)
+#define MEMFAULT_METRICS_STRING_KEY_DEFINE_WITH_SESSION(key_name, max_length, session_key)
 #define MEMFAULT_METRICS_KEY_DEFINE_WITH_RANGE(key_name, value_type, min_value, max_value)
 #define MEMFAULT_METRICS_KEY_DEFINE_WITH_RANGE_AND_SESSION(key_name, value_type, min_value, \
                                                            max_value, session_key)
@@ -61,6 +63,7 @@ static MemfaultMetricsSessionEndCb s_session_end_cbs[] = {
 #undef MEMFAULT_METRICS_KEY_DEFINE
 #undef MEMFAULT_METRICS_KEY_DEFINE_WITH_RANGE
 #undef MEMFAULT_METRICS_STRING_KEY_DEFINE
+#undef MEMFAULT_METRICS_STRING_KEY_DEFINE_WITH_SESSION
 #undef MEMFAULT_METRICS_SESSION_KEY_DEFINE
 #undef MEMFAULT_METRICS_KEY_DEFINE_WITH_SESSION
 #undef MEMFAULT_METRICS_KEY_DEFINE_WITH_RANGE_AND_SESSION
@@ -70,6 +73,7 @@ static MemfaultMetricsSessionEndCb s_session_end_cbs[] = {
 // Generate session key to timer name mapping
 #define MEMFAULT_METRICS_KEY_DEFINE(key_name, value_type)
 #define MEMFAULT_METRICS_STRING_KEY_DEFINE(key_name, max_length)
+#define MEMFAULT_METRICS_STRING_KEY_DEFINE_WITH_SESSION(key_name, max_length, session_key)
 #define MEMFAULT_METRICS_KEY_DEFINE_WITH_RANGE(key_name, value_type, min_value, max_value)
 #define MEMFAULT_METRICS_KEY_DEFINE_WITH_RANGE_AND_SESSION(key_name, value_type, min_value, \
                                                            max_value, session_key)
@@ -84,6 +88,7 @@ static MemfaultMetricId s_memfault_metrics_session_timer_keys[] = {
 #undef MEMFAULT_METRICS_KEY_DEFINE
 #undef MEMFAULT_METRICS_KEY_DEFINE_WITH_RANGE
 #undef MEMFAULT_METRICS_STRING_KEY_DEFINE
+#undef MEMFAULT_METRICS_STRING_KEY_DEFINE_WITH_SESSION
 #undef MEMFAULT_METRICS_SESSION_KEY_DEFINE
 #undef MEMFAULT_METRICS_KEY_DEFINE_WITH_SESSION
 #undef MEMFAULT_METRICS_KEY_DEFINE_WITH_RANGE_AND_SESSION
@@ -116,7 +121,8 @@ typedef struct MemfaultMetricKVPair {
 // Generate heartbeat keys table (ROM):
 #define MEMFAULT_METRICS_KEY_DEFINE_WITH_RANGE_AND_SESSION(key_name, value_type, min_value, \
                                                            max_value, session)              \
-  MEMFAULT_KV_PAIR_ENTRY(key_name, value_type, 0, 0, MEMFAULT_METRICS_SESSION_KEY(session))
+  MEMFAULT_KV_PAIR_ENTRY(key_name, value_type, min_value, max_value,                        \
+                         MEMFAULT_METRICS_SESSION_KEY(session))
 
 #define MEMFAULT_METRICS_KEY_DEFINE_WITH_RANGE(key_name, value_type, min_value, max_value) \
   MEMFAULT_KV_PAIR_ENTRY(key_name, value_type, min_value, max_value,                       \
@@ -132,6 +138,10 @@ typedef struct MemfaultMetricKVPair {
 #define MEMFAULT_METRICS_STRING_KEY_DEFINE(key_name, max_length) \
   MEMFAULT_METRICS_KEY_DEFINE_WITH_RANGE(key_name, kMemfaultMetricType_String, 0, max_length)
 
+#define MEMFAULT_METRICS_STRING_KEY_DEFINE_WITH_SESSION(key_name, max_length, session_key)    \
+  MEMFAULT_METRICS_KEY_DEFINE_WITH_RANGE_AND_SESSION(key_name, kMemfaultMetricType_String, 0, \
+                                                     max_length, session_key)
+
 #define MEMFAULT_METRICS_SESSION_KEY_DEFINE(key_name)                                              \
   MEMFAULT_KV_PAIR_ENTRY(MEMFAULT_METRICS_SESSION_TIMER_NAME(key_name), kMemfaultMetricType_Timer, \
                          0, 0, MEMFAULT_METRICS_SESSION_KEY(key_name))
@@ -142,6 +152,7 @@ static const sMemfaultMetricKVPair s_memfault_heartbeat_keys[] = {
 #undef MEMFAULT_METRICS_KEY_DEFINE
 #undef MEMFAULT_METRICS_KEY_DEFINE_WITH_RANGE
 #undef MEMFAULT_METRICS_STRING_KEY_DEFINE
+#undef MEMFAULT_METRICS_STRING_KEY_DEFINE_WITH_SESSION
 #undef MEMFAULT_METRICS_SESSION_KEY_DEFINE
 #undef MEMFAULT_METRICS_KEY_DEFINE_WITH_SESSION
 #undef MEMFAULT_METRICS_KEY_DEFINE_WITH_RANGE_AND_SESSION
@@ -153,6 +164,9 @@ static const sMemfaultMetricKVPair s_memfault_heartbeat_keys[] = {
 
 #define MEMFAULT_METRICS_STRING_KEY_DEFINE(key_name, max_length) \
   MEMFAULT_METRICS_KEY_DEFINE(key_name, value_type)
+
+#define MEMFAULT_METRICS_STRING_KEY_DEFINE_WITH_SESSION(key_name, max_length, session_key) \
+  MEMFAULT_METRICS_STRING_KEY_DEFINE(key_name, max_length)
 
 #define MEMFAULT_METRICS_SESSION_KEY_DEFINE(key_name)                        \
   MEMFAULT_METRICS_KEY_DEFINE(MEMFAULT_METRICS_SESSION_TIMER_NAME(key_name), \

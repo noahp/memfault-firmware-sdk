@@ -93,6 +93,11 @@ typedef enum MemfaultMetricValueType {
 //! metric is written.
 #define MEMFAULT_METRICS_STRING_KEY_DEFINE(key_name, max_length) MEMFAULT_METRICS_KEY_DEFINE_TRAP_()
 
+//! Declare a string metric for use in a session. See`MEMFAULT_METRICS_STRING_KEY_DEFINE` for
+//! details.
+#define MEMFAULT_METRICS_STRING_KEY_DEFINE_WITH_SESSION(key_name, max_length, session_key) \
+  MEMFAULT_METRICS_KEY_DEFINE_TRAP_()
+
 //! Declare a metric which is tracked in a metric session.
 #define MEMFAULT_METRICS_KEY_DEFINE_WITH_SESSION(key_name, value_type, session_key) \
   MEMFAULT_METRICS_KEY_DEFINE_TRAP_()

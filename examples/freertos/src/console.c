@@ -48,11 +48,31 @@ static int prv_freertos_vassert_cmd(int argc, char *argv[]) {
   configASSERT(0);
   return 0;
 }
+// print all task information
+static int prv_freertos_tasks_cmd(int argc, char *argv[]) {
+  (void)argc, (void)argv;
+  size_t task_count = uxTaskGetNumberOfTasks();
+  // 100 bytes per task should be enough™️
+  char *write_buf = pvPortMalloc(task_count * 100);
+
+  vTaskList(write_buf);
+
+  puts(write_buf);
+
+  vPortFree(write_buf);
+
+  return 0;
+}
 static const sMemfaultShellCommand s_freertos_example_shell_extension_list[] = {
   {
     .command = "freertos_vassert",
     .handler = prv_freertos_vassert_cmd,
     .help = "Example command",
+  },
+  {
+    .command = "freertos_tasks",
+    .handler = prv_freertos_tasks_cmd,
+    .help = "Print all FreeRTOS tasks",
   },
 };
 #endif

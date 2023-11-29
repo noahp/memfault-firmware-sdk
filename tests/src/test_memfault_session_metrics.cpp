@@ -73,23 +73,37 @@ TEST_GROUP(MemfaultSessionMetrics){
 // clang-format on
 
 TEST(MemfaultSessionMetrics, Test_SessionTimer) {
-  MemfaultMetricId key = MEMFAULT_METRICS_KEY(Session_Timer_test_key_session);
+        MemfaultMetricId key = MEMFAULT_METRICS_KEY(mflt_session_timer_test_key_session);
 
-  uint64_t expected = 100;
-  int rv = 0;
+        uint64_t expected = 100;
+        int rv = 0;
 
-  mock().expectOneCall("memfault_metrics_session_serialize");
+        mock().expectOneCall("memfault_metrics_session_serialize");
 
-  rv = MEMFAULT_METRICS_SESSION_START(test_key_session);
-  prv_fake_time_set(expected);
-  rv = MEMFAULT_METRICS_SESSION_END(test_key_session);
+        rv = MEMFAULT_METRICS_SESSION_START(test_key_session);
+        prv_fake_time_set(expected);
+        rv = MEMFAULT_METRICS_SESSION_END(test_key_session);
+        LONGS_EQUAL(0, rv);
+
+        uint32_t val = 0;
+        rv = 0;
+        rv = memfault_metrics_heartbeat_timer_read(key, &val);
+        LONGS_EQUAL(0, rv);
+        LONGS_EQUAL(expected, val);
+}
+
+TEST(MemfaultSessionMetrics, Test_StringKey) {
+  MemfaultMetricId key = MEMFAULT_METRICS_KEY(test_key_string);
+#define TEST_STRING "test_string"
+
+  int rv = memfault_metrics_heartbeat_set_string(key, TEST_STRING);
   LONGS_EQUAL(0, rv);
 
-  uint32_t val = 0;
-  rv = 0;
-  rv = memfault_metrics_heartbeat_timer_read(key, &val);
+  char actual[32] = {0};
+  rv = memfault_metrics_heartbeat_read_string(key, (char *)actual, sizeof(actual));
   LONGS_EQUAL(0, rv);
-  LONGS_EQUAL(expected, val);
+
+  STRCMP_EQUAL(TEST_STRING, (const char *)actual);
 }
 
 TEST(MemfaultSessionMetrics, Test_SessionTimerStopBeforeStart) {

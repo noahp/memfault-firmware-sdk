@@ -14,7 +14,7 @@ extern "C" {
 
 #include "memfault/config.h"
 
-#define MEMFAULT_METRICS_SESSION_TIMER_NAME(key_name) Session_Timer_##key_name
+#define MEMFAULT_METRICS_SESSION_TIMER_NAME(key_name) mflt_session_timer_##key_name
 
 //! Generate extern const char * declarations for all IDs (used in key names):
 #define MEMFAULT_METRICS_KEY_DEFINE_(key_name) \
@@ -24,6 +24,9 @@ extern "C" {
   MEMFAULT_METRICS_KEY_DEFINE(key_name, value_type)
 
 #define MEMFAULT_METRICS_STRING_KEY_DEFINE(key_name, max_length) \
+  MEMFAULT_METRICS_KEY_DEFINE(key_name, _)
+
+#define MEMFAULT_METRICS_STRING_KEY_DEFINE_WITH_SESSION(key_name, max_length, session_name) \
   MEMFAULT_METRICS_KEY_DEFINE(key_name, _)
 
 #define MEMFAULT_METRICS_SESSION_KEY_DEFINE(key_name) \
@@ -42,6 +45,7 @@ extern "C" {
 #undef MEMFAULT_METRICS_KEY_DEFINE
 #undef MEMFAULT_METRICS_KEY_DEFINE_WITH_RANGE
 #undef MEMFAULT_METRICS_STRING_KEY_DEFINE
+#undef MEMFAULT_METRICS_STRING_KEY_DEFINE_WITH_SESSION
 #undef MEMFAULT_METRICS_SESSION_KEY_DEFINE
 #undef MEMFAULT_METRICS_KEY_DEFINE_WITH_SESSION
 #undef MEMFAULT_METRICS_KEY_DEFINE_WITH_RANGE_AND_SESSION
@@ -54,6 +58,9 @@ extern "C" {
   MEMFAULT_METRICS_KEY_DEFINE(key_name, value_type)
 
 #define MEMFAULT_METRICS_STRING_KEY_DEFINE(key_name, max_length) \
+  MEMFAULT_METRICS_KEY_DEFINE(key_name, _)
+
+#define MEMFAULT_METRICS_STRING_KEY_DEFINE_WITH_SESSION(key_name, max_length, session_name) \
   MEMFAULT_METRICS_KEY_DEFINE(key_name, _)
 
 #define MEMFAULT_METRICS_SESSION_KEY_DEFINE(key_name) \
@@ -74,6 +81,7 @@ typedef enum MfltMetricsIndex {
 #undef MEMFAULT_METRICS_KEY_DEFINE
 #undef MEMFAULT_METRICS_KEY_DEFINE_WITH_RANGE
 #undef MEMFAULT_METRICS_STRING_KEY_DEFINE
+#undef MEMFAULT_METRICS_STRING_KEY_DEFINE_WITH_SESSION
 #undef MEMFAULT_METRICS_SESSION_KEY_DEFINE
 #undef MEMFAULT_METRICS_KEY_DEFINE_WITH_SESSION
 #undef MEMFAULT_METRICS_KEY_DEFINE_WITH_RANGE_AND_SESSION
@@ -83,6 +91,7 @@ typedef enum MfltMetricsIndex {
 #define MEMFAULT_METRICS_KEY_DEFINE(key_name, value_type)
 #define MEMFAULT_METRICS_KEY_DEFINE_WITH_RANGE(key_name, value_type, min_value, max_value)
 #define MEMFAULT_METRICS_STRING_KEY_DEFINE(key_name, max_length)
+#define MEMFAULT_METRICS_STRING_KEY_DEFINE_WITH_SESSION(key_name, max_length, session_key)
 #define MEMFAULT_METRICS_KEY_DEFINE_WITH_SESSION(key_name, value_type, session_name)
 #define MEMFAULT_METRICS_KEY_DEFINE_WITH_RANGE_AND_SESSION(key_name, value_type, min_value, \
                                                            max_value, session_name)
@@ -95,6 +104,7 @@ typedef enum MfltMetricSessionIndex {
 #undef MEMFAULT_METRICS_KEY_DEFINE
 #undef MEMFAULT_METRICS_KEY_DEFINE_WITH_RANGE
 #undef MEMFAULT_METRICS_STRING_KEY_DEFINE
+#undef MEMFAULT_METRICS_STRING_KEY_DEFINE_WITH_SESSION
 #undef MEMFAULT_METRICS_KEY_DEFINE_WITH_SESSION
 #undef MEMFAULT_METRICS_KEY_DEFINE_WITH_RANGE_AND_SESSION
 } eMfltMetricsSessionIndex;

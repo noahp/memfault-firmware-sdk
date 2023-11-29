@@ -8,6 +8,7 @@ MEMFAULT_METRICS_KEY_DEFINE_WITH_RANGE(test_key_timer, kMemfaultMetricType_Timer
 MEMFAULT_METRICS_STRING_KEY_DEFINE(test_key_string, 16)
 MEMFAULT_METRICS_SESSION_KEY_DEFINE(test_key_session)
 MEMFAULT_METRICS_KEY_DEFINE_WITH_SESSION(test_session_key_unsigned, kMemfaultMetricType_Unsigned, test_key_session)
+MEMFAULT_METRICS_STRING_KEY_DEFINE_WITH_SESSION(test_session_key_string, 16, test_key_session)
 #endif
 
 #ifdef TEST_LWIP_METRICS

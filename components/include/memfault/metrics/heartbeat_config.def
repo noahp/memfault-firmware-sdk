@@ -19,6 +19,11 @@ MEMFAULT_METRICS_KEY_DEFINE(sync_memfault_successful, kMemfaultMetricType_Unsign
 MEMFAULT_METRICS_KEY_DEFINE(memfault_sync_failure, kMemfaultMetricType_Unsigned)
 #endif
 
+#if MEMFAULT_METRICS_CONNECTIVITY_CONNECTED_TIME
+MEMFAULT_METRICS_KEY_DEFINE(connectivity_connected_time_ms, kMemfaultMetricType_Timer)
+MEMFAULT_METRICS_KEY_DEFINE(connectivity_expected_time_ms, kMemfaultMetricType_Timer)
+#endif
+
 // Operational hours accumulated since the last heartbeat
 MEMFAULT_METRICS_KEY_DEFINE(operational_hours, kMemfaultMetricType_Unsigned)
 // Operational hours without a crash since the last heartbeat
