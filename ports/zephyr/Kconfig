@@ -356,6 +356,14 @@ config MEMFAULT_FS_BYTES_FREE_VFS_PATH
          The path to the virtual filesystem mount point to collect free space
          metrics for, omitting the leading '/'.
 
+config MEMFAULT_SYNC_MEMFAULT_METRICS
+        bool "Enable sync_memfault_successful metric"
+        default y
+        depends on MEMFAULT_HTTP_ENABLE
+        help
+         Collects Memfault metrics for the number of successful and failed
+         syncs to the Memfault cloud.
+
 endif # MEMFAULT_METRICS
 
 config MEMFAULT_SOFTWARE_WATCHDOG_CUSTOM

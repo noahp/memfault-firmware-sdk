@@ -28,7 +28,7 @@ void memfault_metrics_connectivity_record_memfault_sync_success(void) {
 }
 
 void memfault_metrics_connectivity_record_memfault_sync_failure(void) {
-  (void)MEMFAULT_HEARTBEAT_ADD(memfault_sync_failure, 1);
+  (void)MEMFAULT_HEARTBEAT_ADD(sync_memfault_failure, 1);
 }
 #endif  // MEMFAULT_METRICS_MEMFAULT_SYNC_SUCCESS
 

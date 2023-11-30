@@ -11,7 +11,7 @@
 //!   operation successes and failures, which Memfault will use to report sync
 //!   success rate. A "sync" has an implementation-specific meaning.
 //!
-//! - sync_memfault_successful/memfault_sync_failure: These metrics are used to
+//! - sync_memfault_successful/sync_memfault_failure: These metrics are used to
 //!   track syncs of data to Memfault. Platform ports like Zephyr and ESP-IDF
 //!   may implement this metric by default.
 //!

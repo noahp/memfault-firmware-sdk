@@ -16,7 +16,7 @@ MEMFAULT_METRICS_KEY_DEFINE(sync_failure, kMemfaultMetricType_Unsigned)
 
 #if MEMFAULT_METRICS_MEMFAULT_SYNC_SUCCESS
 MEMFAULT_METRICS_KEY_DEFINE(sync_memfault_successful, kMemfaultMetricType_Unsigned)
-MEMFAULT_METRICS_KEY_DEFINE(memfault_sync_failure, kMemfaultMetricType_Unsigned)
+MEMFAULT_METRICS_KEY_DEFINE(sync_memfault_failure, kMemfaultMetricType_Unsigned)
 #endif
 
 #if MEMFAULT_METRICS_CONNECTIVITY_CONNECTED_TIME

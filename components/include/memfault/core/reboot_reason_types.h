@@ -69,6 +69,8 @@ typedef enum MfltResetReason {
 
   // A software reset triggered due to a dynamic memory (heap) allocation failure.
   kMfltRebootReason_OutOfMemory = 0x800A,
+  // A reset due to stack overflow
+  kMfltRebootReason_StackOverflow = 0x800B,
 
   // Resets from Arm Faults
   kMfltRebootReason_BusFault = 0x9100,

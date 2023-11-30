@@ -15,7 +15,7 @@ static MemfaultMetricId sync_successful_key = MEMFAULT_METRICS_KEY(sync_successf
 static MemfaultMetricId sync_failure_key = MEMFAULT_METRICS_KEY(sync_failure);
 static MemfaultMetricId memfault_sync_successful_key =
   MEMFAULT_METRICS_KEY(sync_memfault_successful);
-static MemfaultMetricId memfault_sync_failure_key = MEMFAULT_METRICS_KEY(memfault_sync_failure);
+static MemfaultMetricId memfault_sync_failure_key = MEMFAULT_METRICS_KEY(sync_memfault_failure);
 static MemfaultMetricId connectivity_connected_time_ms_key =
   MEMFAULT_METRICS_KEY(connectivity_connected_time_ms);
 static MemfaultMetricId connectivity_expected_time_ms_key =
