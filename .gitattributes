@@ -1,0 +1,2 @@
+# Classify all '.def' files as C for syntax highlighting purposes
+*.def linguist-language=C
