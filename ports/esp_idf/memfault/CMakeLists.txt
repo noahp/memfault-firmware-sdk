@@ -18,6 +18,24 @@ set(MEMFAULT_SDK_ROOT ${CMAKE_CURRENT_LIST_DIR}/../../..)
 
 include(${MEMFAULT_SDK_ROOT}/cmake/Memfault.cmake)
 
+# If $ENV{MEMFAULT_PLATFORM_PORT_COMPONENTS} is set, set that to MEMFAULT_PLATFORM_PORT_COMPONENTS
+# otherwise default it to 'main'
+if(DEFINED ENV{MEMFAULT_PLATFORM_PORT_COMPONENTS})
+  set(MEMFAULT_PLATFORM_PORT_COMPONENTS $ENV{MEMFAULT_PLATFORM_PORT_COMPONENTS})
+else()
+  set(MEMFAULT_PLATFORM_PORT_COMPONENTS main)
+  message(STATUS "MEMFAULT_PLATFORM_PORT_COMPONENTS not provided, using default ('${MEMFAULT_PLATFORM_PORT_COMPONENTS}')")
+endif()
+
+if(NOT DEFINED MEMFAULT_ESP_HTTP_CLIENT_ENABLE)
+  set(MEMFAULT_ESP_HTTP_CLIENT_ENABLE 1)
+endif()
+if(DEFINED ENV{MEMFAULT_ESP_HTTP_CLIENT_ENABLE})
+  set(MEMFAULT_ESP_HTTP_CLIENT_ENABLE $ENV{MEMFAULT_ESP_HTTP_CLIENT_ENABLE})
+else()
+  set(MEMFAULT_ESP_HTTP_CLIENT_ENABLE 1)
+endif()
+
 # Select RISCV or XTENSA architecture, depending on target chip
 if(DEFINED IDF_VERSION_MAJOR)
   # idf_build_get_property was added in 4.0. RISC-V chips weren't added until
@@ -68,13 +86,13 @@ endif()
 
 # esp-idf version specific porting files
 list(APPEND MEMFAULT_COMPONENTS_SRCS
-  ${MEMFAULT_ESP_IDF_PORT}/memfault_esp_spi_flash.c
+${CMAKE_CURRENT_LIST_DIR}/${MEMFAULT_ESP_IDF_PORT}/memfault_esp_spi_flash.c
 )
 
 include(${CMAKE_CURRENT_LIST_DIR}/${MEMFAULT_ESP_IDF_PORT}/Memfault-esp-idf-compat.cmake)
 
 # This directory holds ports that are common across v3.x and v4.x esp-idf releases
-set(MEMFAULT_ESP_IDF_PORT_COMMON common)
+set(MEMFAULT_ESP_IDF_PORT_COMMON ${CMAKE_CURRENT_LIST_DIR}/common)
 list(APPEND MEMFAULT_COMPONENTS_SRCS
   ${MEMFAULT_ESP_IDF_PORT_COMMON}/memfault_fault_handler.c
   ${MEMFAULT_ESP_IDF_PORT_COMMON}/memfault_platform_core.c
@@ -159,7 +177,7 @@ set(COMPONENT_SRCS ${MEMFAULT_COMPONENTS_SRCS})
 set(COMPONENT_ADD_INCLUDEDIRS ${MEMFAULT_COMPONENTS_INC_FOLDERS})
 list(APPEND COMPONENT_REQUIRES
   ${MEMFAULT_ESP_IDF_VERSION_SPECIFIC_REQUIRES}
-  $ENV{MEMFAULT_PLATFORM_PORT_COMPONENTS}
+  ${MEMFAULT_PLATFORM_PORT_COMPONENTS}
   freertos
   heap
   log
@@ -176,7 +194,7 @@ if(CONFIG_MEMFAULT_MBEDTLS_METRICS)
   list(APPEND COMPONENT_REQUIRES mbedtls)
 endif()
 
-if($ENV{MEMFAULT_ESP_HTTP_CLIENT_ENABLE})
+if(${MEMFAULT_ESP_HTTP_CLIENT_ENABLE})
   list(APPEND COMPONENT_REQUIRES esp_http_client esp_https_ota)
 endif()
 register_component()
@@ -218,7 +236,7 @@ if (CONFIG_MEMFAULT_FREERTOS_TASK_RUNTIME_STATS)
   component_compile_options(-DMEMFAULT_USE_NEW_FREERTOS_IDLETASK_RUNTIME_API=1)
 endif()
 
-component_compile_options(-DMEMFAULT_ESP_HTTP_CLIENT_ENABLE=$ENV{MEMFAULT_ESP_HTTP_CLIENT_ENABLE})
+component_compile_options(-DMEMFAULT_ESP_HTTP_CLIENT_ENABLE=${MEMFAULT_ESP_HTTP_CLIENT_ENABLE})
 
 # FreeRTOS error logging redirect for ESP-IDF compatibility.
 component_compile_options(
