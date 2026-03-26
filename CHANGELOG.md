@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] - xxxx-xx-xx
+
+### 🐛 Fixed
+
+- Zephyr:
+
+  - Zephyr v4.4 removes support for the Mbed TLS legacy crypto backend, only
+    supporting PSA now. Update a compile time check in
+    `memfault_platform_http.c` to support the new option,
+    `CONFIG_PSA_WANT_ALG_SHA_1`, which replaces `CONFIG_MBEDTLS_SHA1`.
+
 ## [1.37.1] - 2026-03-24
 
 This is a patch release, fixing a single item.
