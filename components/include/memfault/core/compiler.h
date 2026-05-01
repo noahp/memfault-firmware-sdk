@@ -36,10 +36,24 @@ extern "C" {
     #define MEMFAULT_COMPILER_ARM_V7_A_R 0
   #endif
 
-  // If not Cortex-A/R, select Cortex-M family
-  #define MEMFAULT_COMPILER_ARM_CORTEX_M !MEMFAULT_COMPILER_ARM_V7_A_R
+  // Pre-Cortex ARM families: ARM7TDMI (ARMv4T), ARM9 (ARMv5TE/TEJ), ARM11 (ARMv6).
+  // These lack Cortex-M system registers (SCB, NVIC, etc.) so must not be treated
+  // as Cortex-M even though MEMFAULT_COMPILER_ARM_V7_A_R is also 0 for them.
+  #if defined(__ARM_ARCH_4T__) || \
+      defined(__ARM_ARCH_5T__) || defined(__ARM_ARCH_5TE__) || defined(__ARM_ARCH_5TEJ__) || \
+      defined(__ARM_ARCH_6__) || defined(__ARM_ARCH_6J__) || defined(__ARM_ARCH_6K__) || \
+      defined(__ARM_ARCH_6Z__) || defined(__ARM_ARCH_6ZK__) || defined(__ARM_ARCH_6T2__)
+    #define MEMFAULT_COMPILER_ARM_LEGACY 1
+  #else
+    #define MEMFAULT_COMPILER_ARM_LEGACY 0
+  #endif
+
+  // Cortex-M = ARM, not Cortex-A/R, and not a pre-Cortex legacy core
+  #define MEMFAULT_COMPILER_ARM_CORTEX_M \
+    (!MEMFAULT_COMPILER_ARM_V7_A_R && !MEMFAULT_COMPILER_ARM_LEGACY)
 #else
   #define MEMFAULT_COMPILER_ARM_V7_A_R 0
+  #define MEMFAULT_COMPILER_ARM_LEGACY 0
   #define MEMFAULT_COMPILER_ARM_CORTEX_M 0
 #endif
 

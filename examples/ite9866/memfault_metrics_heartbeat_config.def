@@ -1,0 +1,7 @@
+// Heartbeat metrics for ITE9866 metrics serialization test.
+// These are representative metrics for an EC (Embedded Controller).
+
+MEMFAULT_METRICS_KEY_DEFINE(uptime_ms, kMemfaultMetricType_Unsigned)
+MEMFAULT_METRICS_KEY_DEFINE(cpu_temp_c, kMemfaultMetricType_Signed)
+MEMFAULT_METRICS_KEY_DEFINE_WITH_RANGE(fan_speed_rpm, kMemfaultMetricType_Unsigned, 0, 6000)
+MEMFAULT_METRICS_KEY_DEFINE(ec_sleep_ms, kMemfaultMetricType_Timer)
