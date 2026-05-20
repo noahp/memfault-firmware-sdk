@@ -384,6 +384,23 @@ static int prv_timer_isr_hang_example(const struct shell *shell, size_t argc, ch
   return 0;
 }
 
+#if defined(CONFIG_MEMFAULT_PROJECT_KEY_SETTINGS)
+static int prv_set_project_key(const struct shell *shell, size_t argc, char **argv) {
+  if (argc == 1) {
+    const char *key = g_mflt_http_client_config.api_key;
+    shell_print(shell, "Project key: %s", (key && key[0]) ? key : "(not set)");
+    return 0;
+  }
+  int rv = memfault_zephyr_port_set_project_key(argv[1], strlen(argv[1]));
+  if (rv != 0) {
+    shell_print(shell, "Failed to set project key (err %d)", rv);
+  } else {
+    shell_print(shell, "Project key set and saved to settings");
+  }
+  return rv;
+}
+#endif
+
 #if defined(CONFIG_MEMFAULT_SHELL_SELF_TEST)
 static int prv_self_test(MEMFAULT_UNUSED const struct shell *shell, size_t argc, char **argv) {
   return memfault_demo_cli_cmd_self_test(argc, argv);
@@ -472,6 +489,10 @@ SHELL_STATIC_SUBCMD_SET_CREATE(
   SHELL_CMD(test, &sub_memfault_crash_cmds,
             "commands to verify memfault data collection (https://mflt.io/mcu-test-commands)",
             NULL),
+#if defined(CONFIG_MEMFAULT_PROJECT_KEY_SETTINGS)
+  SHELL_CMD_ARG(set_project_key, NULL, "get or set Memfault project key",
+                prv_set_project_key, 1, 1),
+#endif
   SHELL_SUBCMD_SET_END /* Array terminated. */
 );
 

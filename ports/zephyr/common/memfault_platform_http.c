@@ -9,6 +9,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/types.h>
 #include MEMFAULT_ZEPHYR_INCLUDE(init.h)
 #include MEMFAULT_ZEPHYR_INCLUDE(kernel.h)
@@ -77,30 +78,6 @@
 // Timeout for the socket file descriptor to become available for I/0
 #define POLL_TIMEOUT_MS CONFIG_MEMFAULT_HTTP_CLIENT_TIMEOUT_MS
 
-// The nRF-Connect SDK has an implementation of this structure
-#if !defined(CONFIG_MEMFAULT_NCS_PROJECT_KEY)
-MEMFAULT_STATIC_ASSERT(
-  sizeof(CONFIG_MEMFAULT_PROJECT_KEY) > 1,
-  "Memfault Project Key not configured. Please visit https://mflt.io/project-key "
-  "and add CONFIG_MEMFAULT_PROJECT_KEY=\"YOUR_KEY\" to prj.conf");
-
-sMfltHttpClientConfig g_mflt_http_client_config = {
-  .api_key = CONFIG_MEMFAULT_PROJECT_KEY,
-  #if defined(CONFIG_MEMFAULT_HTTP_DISABLE_TLS)
-  .disable_tls = true,
-  .chunks_api = {
-    .host = sizeof(CONFIG_MEMFAULT_HTTP_CHUNKS_API_HOST) > 1 ?
-              CONFIG_MEMFAULT_HTTP_CHUNKS_API_HOST : NULL,
-    .port = 80,
-  },
-  .device_api = {
-    .host = sizeof(CONFIG_MEMFAULT_HTTP_DEVICE_API_HOST) > 1 ?
-              CONFIG_MEMFAULT_HTTP_DEVICE_API_HOST : NULL,
-    .port = 80,
-  },
-  #endif
-};
-#endif
 
 #if defined(CONFIG_MEMFAULT_HTTP_SOCKET_DISPATCH)
 // Runtime configurable

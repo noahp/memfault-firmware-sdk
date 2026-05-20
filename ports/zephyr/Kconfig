@@ -378,6 +378,33 @@ config MEMFAULT_METRICS_LOGS_ENABLE
 
 endif # MEMFAULT_LOGGING_ENABLE
 
+config MEMFAULT_PROJECT_KEY
+        string "Memfault Project Key"
+        depends on MEMFAULT_PROJECT_KEY_STATIC
+        help
+          Token used to communicate with Memfault. Find it at
+          https://mflt.io/project-key
+
+choice MEMFAULT_PROJECT_KEY_SOURCE
+        prompt "Memfault Project Key source"
+        default MEMFAULT_PROJECT_KEY_STATIC
+
+config MEMFAULT_PROJECT_KEY_STATIC
+        bool "Static (compile-time) Memfault Project Key"
+        help
+          Use the compile-time CONFIG_MEMFAULT_PROJECT_KEY string as the
+          Memfault project key.
+
+config MEMFAULT_PROJECT_KEY_SETTINGS
+        bool "Memfault Project Key from Zephyr settings subsystem"
+        depends on SETTINGS
+        help
+          Load the Memfault project key from the Zephyr settings subsystem at
+          runtime. The key is stored and loaded under the settings path
+          "memfault/project_key".
+
+endchoice # MEMFAULT_PROJECT_KEY_SOURCE
+
 config MEMFAULT_ROOT_CERT_STORAGE
         bool "Memfault TLS root certificate storage enabled"
         default y if MEMFAULT_HTTP_ENABLE && !MEMFAULT_HTTP_DISABLE_TLS
@@ -555,12 +582,6 @@ config MEMFAULT_TLS_CERTS_USE_DER
           memory requirements (for example if using mbedTLS).
 
 endchoice # MEMFAULT_TLS_CERTS_FORMAT
-
-config MEMFAULT_PROJECT_KEY
-        string "Memfault Project Key"
-        help
-          Token used to communicate with Memfault. Find it at
-          https://mflt.io/project-key
 
 config MEMFAULT_HTTP_CLIENT_TIMEOUT_MS
         int "The HTTP client timeout in milliseconds"
